@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="css/listview-grid.css">
+	<link rel="stylesheet" href="css/swiper.min.css">
+	<script src="js/jquery-2.1.0.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="js/ad.js"></script>
+	<script type="text/javascript" src="js/event_ad.js"></script>
+	<script type="text/javascript" src="js/event.js"></script>
+	<script src="js/ad-panel-Special-topic.js"></script>
+	<script src="js/adq.js"></script>
+	<script src="js/panel_all.js"></script>
+	
+  <!-- 專門處理cookie的js -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+	<script>
+    var mAccount ;
+    var mPassword ;
+
+	   $(function(){
+
+	   	$("#home").on("pageshow",function(){
+	   		setInterval(home_ad,5000);
+	   	});
+	   	$("#event").on("pageshow",function(){
+	   		setInterval(event_ad,5000);
+	   		event_getData();
+	   	});
+
+     
+
+      if(Cookies.get('account')!=null&&Cookies.get('password')!=null){
+        mAccount = Cookies.get('account');
+        mPassword = Cookies.get('password');
+        checkCookie(mAccount,mPassword);
+      }
+
+      $("#login").on("click",check);//按下時,會進入check方法做確認
+      $("#logout").on("click",function(){
+        $(".")
+      });
+     });
+
+     //將帳號密碼的值傳入php做確認
+     function check(){ 
+      //確認帳號及密碼有無輸入值
+      if($("#account").val()==""||$("#password").val()==""){
+        alert("請輸入帳號或密碼!!");
+      }else{
+        checkLogin(1);
+         /*$.ajax({
+        type:"POST",
+        url:"",
+        data:{account:$("#account").val(),password:$("#password").val()},
+        success:checkLogin,//成功時,將php回傳的訊息做處理
+        error:function(){
+          alert("連線發生錯誤");
+        }
+      });*/
+      }
+     
+     }
+
+     //確認php回傳的訊息,並根據信息確認是否登入成功
+     function checkLogin(data){
+        switch(data){
+          case 0:
+            alert("無此帳號");
+            break;
+          case 1:
+            alert($("#account").val()+" 歡迎回來!!!");
+            //將成功登入的帳號及密碼給cookie儲存;
+            mAccount = $("#account").val();
+            mPassword = $("#password").val();
+            alert(mAccount);
+            //Cookies.set('name', 'value', { expires: 7 });
+            Cookies.set('account', mAccount, { expires: 7 });//7天後cookie自動消除
+            Cookies.set('password', mPassword, { expires: 7 });
+            alert(Cookies.get('account'));
+
+            //成功登入後,更改右panel的内容
+            $(".panel_right").html("<div><h3>登出及設定</h3><div class='ui-grid-a'><div class='ui-block-a'><a href='#' data-role='button' data-theme='b' id='logout'>登出</a></div><div class='ui-block-b'><a href='#' data-role='button' data-theme='b' id='setting'>設定</a></div></div></div>");
+            break;  
+
+        }
+     }
+
+     function checkCookie(acc,pwd){
+      alert(acc+" "+pwd);
+     }
+	</script>
+
+	<style>
+		#home{
+	      position: relative;
+	      height: 100%;
+	    }
+	    #home{
+	      background: #eee;
+	      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+	      font-size: 14px;
+	      color:#000;
+	      margin: 0;
+	      padding: 0;
+	    }
+	    .swiper-container {
+	      width: 100%;
+	      height: 100%;
+	    }
+	    .swiper-slide {
+	      text-align: center;
+	      font-size: 18px;
+	      background: #fff;
+	      /* Center slide text vertically */
+	      display: -webkit-box;
+	      display: -ms-flexbox;
+	      display: -webkit-flex;
+	      display: flex;
+	      -webkit-box-pack: center;
+	      -ms-flex-pack: center;
+	      -webkit-justify-content: center;
+	      justify-content: center;
+	      -webkit-box-align: center;
+	      -ms-flex-align: center;
+	      -webkit-align-items: center;
+	      align-items: center;
+	    }
+		.pimg_01{
+			
+			border-radius: 200px;
+			width: 200px;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.pimg_00{
+			box-shadow: 10px 10px 10px 10px #aaa;
+			
+			width: 200px;
+			height: 200px;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.logo{
+			width: 200px;
+			height: 200px;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-right: auto;
+			margin-left: auto;
+		}
+		
+		.logo1{
+			width: 900;
+			height: 100px;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-right: auto;
+			margin-left: auto;
+		}
+		/*.pimg_01{
+			border-radius: 200px;
+			border: solid 0.16vw;
+			width: 33vw;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-left: auto;
+			margin-right: auto;
+		}*/
+		/*.pimg_00{
+			box-shadow: 10px 10px 10px 10px #aaa;
+			border-radius: 200px;
+			width: 200px;
+			height: 200px;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-left: auto;
+			margin-right: auto;
+		}*/
+		/*.logo{
+			width: 200px;
+			height: 200px;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-right: auto;
+			margin-left: auto;
+		}
+		.logo1{
+			width: 100vw;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-right: auto;
+			margin-left: auto;
+		}*/
+		.lay01{
+			width: 100%;
+			height: 50%;
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-right: auto;
+			margin-left: auto;
+		}
+		.img01{
+		width: 90%;
+		height: ;
+		padding-top: 15px;
+		}
+		.pimg{
+		width: 250px;
+		margin-top: 0;
+		margin-bottom: 0;
+		margin-right: auto;
+		margin-left: auto;
+	}   
+	</style>
+</head>      
+<body>
+	<div data-role="page" id="home">
+
+<!-- panel設定側滑功能有問題 -->			
+			<div data-role="panel" id="home-panell" data-position="left" data-theme="b" data-display="overlay" >
+          	 <ul data-role="listview" >
+                <li><h3>主選單</h3></li>
+                <li  ><a href="#" style="background-color: #00FFFF">審計首頁</a></li>
+                <li><a href="#about" >關於審計</a></li>
+                <li><a href="#event" >近期活動</a></li>
+                <li><a href="#shop01" >店家介紹</a></li>
+                <li><a href="#favorite" >我的最愛</a></li>
+                <li><a href="#more" >探索更多</a></li>
+                <li><a href="#bus" >公車資訊</a></li>
+                <li><a href="#ubike" >附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#about_us" >關於我們</a></li>
+              </ul> 
+            </div>
+
+        <div data-role="panel" class="panel_right" id="home-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+          <div >
+          	 <h3>登入</h3>
+            
+           		<div data-role="fieldcontain">
+           			<label for="account">帳號:</label>
+           			<input type="text" name="account" id="account">
+           		</div>
+
+   				<div data-role="fieldcontain">
+   		 			<label for="password">密碼:</label>
+   		 			<input type="password" name="password" id="password">
+   		 		</div> 
+
+   		 	   <div class="ui-grid-a">
+       	    	<div class="ui-block-a">
+       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+       	    	</div>
+       	    	<div class="ui-block-b">
+       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+       	    	</div>
+       	    	
+       	     </div>
+           </div>
+         </div>
+
+		<div data-role="header" data-theme="b" data-position="fixed">
+        	<a href="#home-panell" data-role="button" data-theme="b" data-icon="bars" data-iconpos="notext">LeftPanel</a>
+			<a href="#home-panelr" data-role="button" data-theme="b" data-icon="arrow-l" data-iconpos="notext" >RightPanel</a>
+			<h1>愛文創審計新村</h1>
+		</div>
+		<div data-role="main" data-theme="b" data-role="content">
+				<ul data-role="listview"  data-inset="true" data-role="content" data-role="controlgroup">
+					<li data-role="list-divider" data-theme="b">
+						<div data-role="navbar">
+						        <ul>
+						            <li>
+						             	<div class="sun">
+						              		<a href=""><img src="images/sun.png"></a>
+						             	</div>                 
+						            </li>
+						      		<li>
+						      			<a href=""><p>25℃</p></a>
+						      		</li> 
+						      		<li>
+						        		<a href=""><p>空氣品質:危險</p></a>
+						      		</li> 
+						     	</ul>   
+						    </div>
+					</li>
+					<li>
+						<div class="logo">
+							<a href="#" id="adlink">
+							<img src="images/cat1.jpg" alt="" width="99%" class="pimg_00" id="adsrcimg">
+							</a>				
+						</div>
+					</li>
+					<li data-role="list-divider" data-theme="b">
+						<div data-role="controlgroup" data-type="horizontal">
+						<div>近期活動</div>
+						<a href="#" class="ui-btn-right" data-role="">More》</a> 
+						</div>
+					</li>
+					<li>
+						<a href="">
+							<img src="images/cat2.jpg" width="99%" alt="">
+							<h3>1</h3>
+							<p>2</p>	
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img src="images/cat3.jpg" alt="">
+							<h3>3</h3>
+							<p>4</p>														
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img src="images/cat4.jpg" alt="">
+							<h3>5</h3>
+							<p>6</p>													
+						</a>
+					</li>
+					<li data-role="list-divider" data-theme="b" id="shop">熱門店家!</li>
+				</ul>			
+		</div>
+		<!-- Swiper -->
+		<div class="swiper-container">
+ 		   <div class="swiper-wrapper">
+ 		      <div class="swiper-slide"><img src="images/01.png" ></div>
+ 		      <div class="swiper-slide"><img src="images/02.png"></div>
+ 		      <div class="swiper-slide"><img src="images/03.png"></div>
+ 		      <div class="swiper-slide"><img src="images/04.png" ></div>
+ 		      <div class="swiper-slide"><img src="images/05.png"></div>
+ 		      <div class="swiper-slide"><img src="images/06.png"></div>
+ 		   </div>
+ 		   <!-- Add Pagination -->
+ 		   <div class="swiper-pagination"></div>
+ 		</div>
+
+			<!-- Swiper JS -->
+ 		<script src="js/swiper.min.js"></script>
+
+			<!-- Initialize Swiper -->
+  		<script>
+    		var swiper = new Swiper('.swiper-container', {
+      			slidesPerView: 3,
+      			spaceBetween: 30,
+      			freeMode: true,
+      			pagination: {
+        			el: '.swiper-pagination',
+        			clickable: true,
+      			},
+    		});
+  		</script>
+    </div>
+
+<!-- 關於審計設定 -->    
+<div data-role="page" id="about" data-fullscreen="true">
+
+	    <div data-role="panel" id="about-panell" data-position="left" data-theme="b" data-dispaly="overlay" ><!-- 這是 Panel鈕 -->
+			<ul data-role="listview" data-inset="true">
+                <li><h3>主選單</h3></li>
+                <li><a href="#home" >審計首頁</a></li>
+                <li><a href="#" style="background-color: #00FFFF">關於審計</a></li>
+                <li><a href="#event" >近期活動</a></li>
+                <li><a href="#shop01" >店家介紹</a></li>
+                <li><a href="#favorite" >我的最愛</a></li>
+                <li><a href="#more" >探索更多</a></li>
+                <li><a href="#bus" >公車資訊</a></li>
+                <li><a href="#ubike" >附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#about_us" >關於我們</a></li>
+              </ul> 
+		</div>
+        
+         <div data-role="panel" class="panel_right" id="about-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+	          <div >
+	          	 <h3>登入</h3>
+	            
+	           		<div data-role="fieldcontain">
+                <label for="account">帳號:</label>
+                <input type="text" name="account" id="account">
+              </div>
+
+	   				<div data-role="fieldcontain">
+	   		 			<label for="password">密碼:</label>
+	   		 			<input type="password" name="password" id="password">
+	   		 		</div> 
+
+	   		 	   <div class="ui-grid-a">
+	       	    	<div class="ui-block-a">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+	       	    	</div>
+	       	    	<div class="ui-block-b">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+	       	    	</div>
+	       	    	
+	       	     </div>
+	           </div>
+          </div>
+
+		<div data-role="header"  data-position="fixed">
+			<a href="#about-panell" data-role="button" data-theme="b" data-icon="bars" data-iconpos="notext" >LeftPanel</a>
+			<a href="#about-panelr" data-role="button" data-theme="b" data-icon="arrow-l" data-iconpos="notext" >Panel</a>
+			<h1>關於審計</h1>
+			</div>
+        <div data-role="main" class="ui-content">
+				<div class="pimg">	
+			<a href="#" >
+				<img src="images/slider1.jpg" alt="" width="250px" height="250px" id="homeimg" >
+			</a>
+				</div>
+           
+			
+				<div style=" width: 50vw; margin:0 auto 0 auto">
+					<p>鄰近馬路卻獨出一格的審計新村，便是在這片將近半世紀歷史的老宿舍，審計新村是臺中市第三批臺灣省政府宿舍群之一，省府時期審計處的員工眷舍，凍省之後成了閒置空間荒廢多年，面積雖然只有0.52公頃，但所處地點就在臺中勤美綠園道附近，因此更是顯示出審計新村的獨特性，老舊的建築充滿了時代痕跡，如今經由政府再規劃，成功轉型為青年創業基地，透過青年活力與創造力，激盪出令人目不暇給的空間韻味與獨特氛圍。</p>	
+				</div>
+				
+			
+			
+			</div>
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+	
+		</div>
+
+</div>
+
+
+<!-- 近期活動頁面 -->
+<div data-role="page" id="event">
+		<div data-role="panel" id="event-panell" data-position="left" data-theme="b" data-dispaly="overlay" ><!-- 這是 Panel鈕 -->
+			<ul data-role="listview" data-inset="true">
+                <li><h3>主選單</h3></li>
+                <li><a href="#home" >審計首頁</a></li>
+                <li><a href="#about" >關於審計</a></li>
+                <li><a href="#" style="background-color: #00FFFF">近期活動</a></li>
+                <li><a href="#shop01" >店家介紹</a></li>
+                <li><a href="#favorite" >我的最愛</a></li>
+                <li><a href="#more" >探索更多</a></li>
+                <li><a href="#bus" >公車資訊</a></li>
+                <li><a href="#ubike" >附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#about_us" >關於我們</a></li>
+              </ul> 
+		</div>
+        
+         <div data-role="panel" class="panel_right" id="event-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+	          <div >
+	          	 <h3>登入</h3>
+	            
+	           		<div data-role="fieldcontain">
+                <label for="account">帳號:</label>
+                <input type="text" name="account" id="account">
+              </div>
+
+	   				<div data-role="fieldcontain">
+	   		 			<label for="password">密碼:</label>
+	   		 			<input type="password" name="password" id="password">
+	   		 		</div> 
+
+	   		 	   <div class="ui-grid-a">
+	       	    	<div class="ui-block-a">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+	       	    	</div>
+	       	    	<div class="ui-block-b">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+	       	    	</div>
+	       	    	
+	       	     </div>
+	           </div>
+	         </div>
+
+
+		<div data-role="header" data-theme="b">
+			<a href="#event-panell" data-role="button" data-theme="b" data-icon="bars" data-iconpos="notext" >LeftPanel</a>
+			<a href="#event-panelr" data-role="button" data-theme="b" data-icon="arrow-l" data-iconpos="notext" >Panel</a>
+			<h1>近期活動</h1>
+			
+		</div>		
+
+	
+		<div role="main" class="ui-content">
+			<!--不用迴圈 直接append進<ul> -->
+			<ul data-role="listview" data-inset="true" id="list"></ul>
+		</div>  
+		<div data-role="footer" data-position="fixed" data-theme="b">
+		</div>	
+ 	 </div>
+
+  	<!-- page content1 -->	
+  	<div data-role="page" id="content1">
+    	<div data-role="header" data-theme="b">
+    		<a href="#event" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext" id="back">Back</a><!-- 返迴鈕 -->
+      		<h1>活動詳請</h1>
+    	</div>
+
+    	<div role="main" class="ui-content">
+	        <table width="100%">
+	        	<tr>
+	        		<td align="center" valign="center" >
+	        		</td>
+	        	</tr>	
+			</table>
+			<div id="event_content1">
+			</div>
+    	</div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+    </div>
+  </div>
+   <!-- page content2 -->
+  	<div data-role="page" id="content2">
+    	<div data-role="header" data-theme="b">
+    		<a href="#event" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext" id="back">Back</a><!-- 返迴鈕 -->
+      		<h1>活動詳請</h1>
+    	</div>
+
+    	<div role="main" class="ui-content">
+	        <table width="100%">
+	        	<tr>
+	        		<td align="center" valign="center" >
+	        		</td>
+	        	</tr>	
+			</table>
+			<div id="event_content2">
+			</div>
+    	</div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+    </div>
+  </div>
+   <!-- page content3 -->  
+    	<div data-role="page" id="content3">
+    	<div data-role="header" data-theme="b">
+    		<a href="#event" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext" id="back">Back</a><!-- 返迴鈕 -->
+      		<h1>活動詳請</h1>
+    	</div>
+
+    	<div role="main" class="ui-content">
+	        <table width="100%">
+	        	<tr>
+	        		<td align="center" valign="center" >
+	        		</td>
+	        	</tr>	
+			</table>
+			<div id="event_content3">
+			</div>
+    	</div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+    </div>
+  </div>
+   <!-- page content4 -->  
+    	<div data-role="page" id="content4">
+    	<div data-role="header" data-theme="b">
+    		<a href="#event" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext" id="back">Back</a><!-- 返迴鈕 -->
+      		<h1>活動詳請</h1>
+    	</div>
+
+    	<div role="main" class="ui-content">
+	        <table width="100%">
+	        	<tr>
+	        		<td align="center" valign="center" >
+	        		</td>
+	        	</tr>	
+			</table>
+			<div id="event_content4">
+			</div>
+    	</div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+    </div>
+  </div>
+     <!-- page content5 --> 
+    	<div data-role="page" id="content5">
+    	<div data-role="header" data-theme="b">
+    		<a href="#event" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext" id="back">Back</a><!-- 返迴鈕 -->
+      		<h1>活動詳請</h1>
+    	</div>
+
+    	<div role="main" class="ui-content">
+	        <table width="100%">
+	        	<tr>
+	        		<td align="center" valign="center" >
+	        		</td>
+	        	</tr>	
+			</table>
+			<div id="event_content5">
+			</div>
+    	</div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+    </div>
+  </div> 
+     <!-- page content6 --> 
+    	<div data-role="page" id="content6">
+    	<div data-role="header" data-theme="b">
+    		<a href="#event" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext" id="back">Back</a><!-- 返迴鈕 -->
+      		<h1>活動詳請</h1>
+    	</div>
+
+    	<div role="main" class="ui-content">
+	        <table width="100%">
+	        	<tr>
+	        		<td align="center" valign="center" >
+	        		</td>
+	        	</tr>	
+			</table>
+			<div id="event_content6">
+			</div>
+    	</div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+    </div>
+  </div> 
+     <!-- page content7 -->
+    	<div data-role="page" id="content7">
+    	<div data-role="header" data-theme="b">
+    		<a href="#event" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext" id="back">Back</a><!-- 返迴鈕 -->
+      		<h1>活動詳請</h1>
+    	</div>
+
+    	<div role="main" class="ui-content">
+	        <table width="100%">
+	        	<tr>
+	        		<td align="center" valign="center" >
+	        		</td>
+	        	</tr>	
+			</table>
+			<div id="event_content7">
+			</div>
+    	</div>
+    <div data-role="footer" data-position="fixed" data-theme="b">
+    </div>
+  </div>      
+   	 	
+
+<!-- 店家介紹頁面1設定 -->
+<div data-role="page" id="shop01">
+        <div data-role="panel" id="shop01-panell" data-position="left" data-theme="b" data-dispaly="overlay" ><!-- 這是 Panel鈕 -->
+			<ul data-role="listview" data-inset="true">
+                <li><h3>主選單</h3></li>
+                <li><a href="#home" >審計首頁</a></li>
+                <li><a href="#about" >關於審計</a></li>
+                <li><a href="#event" >近期活動</a></li>
+                <li><a href="#" style="background-color: #00FFFF">店家介紹</a></li>
+                <li><a href="#favorite" >我的最愛</a></li>
+                <li><a href="#more" >探索更多</a></li>
+                <li><a href="#bus" >公車資訊</a></li>
+                <li><a href="#ubike" >附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#about_us" >關於我們</a></li>
+              </ul> 
+		</div>
+        
+         <div data-role="panel" class="panel_right" id="shop01-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+	          <div >
+	          	 <h3>登入</h3>
+	            
+	           		<div data-role="fieldcontain">
+                <label for="account">帳號:</label>
+                <input type="text" name="account" id="account">
+              </div>
+
+	   				<div data-role="fieldcontain">
+	   		 			<label for="password">密碼:</label>
+	   		 			<input type="password" name="password" id="password">
+	   		 		</div> 
+
+	   		 	   <div class="ui-grid-a">
+	       	    	<div class="ui-block-a">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+	       	    	</div>
+	       	    	<div class="ui-block-b">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+	       	    	</div>
+	       	    	
+	       	     </div>
+	           </div>
+	         </div>
+
+
+		<div data-role="header" data-theme="b">
+        	<a href="#shop01-panell" data-role="button" data-theme="b" data-icon="bars" data-iconpos="notext" >LeftPanel</a>
+			<a href="#shop01-panelr" data-role="button" data-theme="b" data-icon="arrow-l" data-iconpos="notext" >Panel</a>	
+
+			<h2>店家介紹</h2>
+		</div>
+
+		<div data="main" class="ui-content">
+			<div class="lay01">
+				<a href="#shop02">
+				<img src="images/shop01_btn01.jpg" alt="" width="100%">
+			</a>
+			</div>
+			<div class="lay01">
+			<a href="">
+				<img src="images/shop01_btn02.jpg" alt="" width="100%">
+			</a>
+			</div>
+		</div>
+
+		<div data-role="footer" data-position="fixed">
+			
+		</div>
+	</div>	
+
+<!-- 店家介紹頁面2設定 -->
+<div data-role="page" id="shop02">
+		<div data-role="header" data-theme="b">
+			<a href="#shop01" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext">Back</a><!-- 返迴鈕 -->
+			<h2>店家介紹</h2>
+		</div>
+
+		<div data="main" class="ui-content">
+			<ul data-role="listview" data-inset="true">
+		    <li><a href="#shop03">
+		        <img src="images/p1.jpg">
+			    <h2>泡芙之家</h2>
+			    <p>世界上最好吃的泡芙底家</p></a>
+		    </li>
+		    <li><a href="#">
+		        <img src="images/p2.jpg">
+			    <h2>雞蛋糕</h2>
+			    <p>各種特別口味雞蛋糕</p></a>
+		    </li>
+		    <li><a href="#">
+		        <img src="images/p3.jpg">
+			    <h2>冰淇淋</h2>
+			    <p>最懷舊古早味的冰淇淋</p></a>
+		    </li>
+		</ul>
+		</div>
+
+		<div data-role="footer" data-position="fixed">
+			
+		</div>
+	</div>
+
+<!-- 店家介紹頁面3設定 -->
+<div data-role="page" id="shop03">
+		<div data-role="header" data-theme="b">
+			<a href="#shop02" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext">Back</a><!-- 返迴鈕 -->
+			<h2>店家介紹</h2>
+		</div>
+
+		<div data="main" class="ui-content">
+			<img src="https://api.fnkr.net/testimg/350x200/00CED1/FFF/?text=img+placeholder" class="img01" style="display:block; margin:auto;" width="100%">
+
+
+			<h2 style="color:purple; margin-left:10px; ">泡芙的家</h2>
+
+			<div class="ui-grid-c">
+				<div class="ui-block-a">
+					<a href="#product" data-role="button" style="background-color:#F50000; color:#FFFF3B; font-size:10px;">商品介紹</a>					
+				</div>
+				<div class="ui-block-b">
+					<a href="#popup1" data-rel="popup" data-role="button" style="background-color:#F50000; color:#FFFF3B; font-size:10px;">店家位置</a>
+					<div data-role="popup" id="popup1">
+					<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+					<img src="images/map.jpg" style="max-height:512px;"/>
+					</div>
+
+
+				</div>
+				<div class="ui-block-c">
+					<a href="#popup2" data-role="button" data-rel="popup" style="background-color:#F50000; color:#FFFF3B; font-size:10px;">我要評論</a>
+					<div data-role="popup" id="popup2">
+						<div>
+							<h3>我要評論</h3>
+							<div data-role="fieldcontain">
+								<label for="message"></label>
+    							<textarea name="message" id="message"></textarea>
+							</div>	
+							<div class="ui-grid-a">
+								<div class="ui-block-a">
+									<a href="#" data-role="button" data-rel="back">取消並返回</a>
+								</div>
+								<div class="ui-block-b">
+									<a href="" data-role="button">確認並送出</a>
+								</div>
+								
+							</div>	
+						</div>
+					</div>
+
+
+				</div>
+				<div class="ui-block-d">
+					<img src="images/heart.png" style="display:block; margin:auto; margin-top:10px; ">
+				</div>
+			</div>
+
+
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+
+			<ul data-role="listview">
+				<li><a href="#"><img src="images/7x5.jfif"<h3>金X5</h3><p>好吃!!!!!!
+				</p></a></li>
+				<li><a href="#"><img src="images/7x5.jfif"<h3>金X5</h3><p>好吃!!!!!!
+				</p></a></li>
+				<li><a href="#"><img src="images/7x5.jfif"<h3>金X5</h3><p>好吃!!!!!!
+				</p></a></li>
+			</ul>
+
+
+		</div>
+
+		
+
+		<div data-role="footer" data-position="fixed">
+			
+		</div>
+	</div>
+
+<!-- 商品介紹頁面 -->
+<div data-role="page" id="product" style="background-color: black">
+		<div data-role="header" data-theme="b">
+			<a href="#shop03" data-icon="carat-l" data-role="button" 
+      		data-iconpos="notext">Back</a><!-- 返迴鈕 -->
+			<h2>店家介紹</h2>
+		</div>
+
+		<div data="main" class="ui-content">
+			<a href="#popup_1" data-rel="popup" data-position-to="window">
+				<img src="images/p1.jpg" style="width:100%"/>
+			</a>
+
+			<div data-role="popup" id="popup_1">
+			<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+			<img src="images/p1.jpg" style="max-height:512px;"/>
+			</div>
+
+			<a href="#popup_2" data-rel="popup" data-position-to="window">
+				<img src="images/p2.jpg" style="width:49%"/>
+			</a>
+
+			<div data-role="popup" id="popup_2">
+			<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+			<img src="images/p2.jpg" style="max-height:512px;"/>
+			</div>
+
+			<a href="#popup_3" data-rel="popup" data-position-to="window">
+				<img src="images/p3.jpg" style="width:49%"/>
+			</a>
+
+			<div data-role="popup" id="popup_3">
+			<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+			<img src="images/p3.jpg" style="max-height:512px;"/>
+			</div>
+			
+		</div>
+
+		<div data-role="footer" data-position="fixed">
+			
+		</div>
+	</div>	
+
+
+<!-- 我的最愛設定頁面 頁面黑色不會調設定 -->
+<div data-role="page" id="favorite" data-theme="a" class="my-page">
+
+	  <div data-role="panel"  id="favorite-panell" data-position="left" data-theme="b" data-dispaly="overlay" ><!-- 這是 Panel鈕 -->
+			<ul data-role="listview" data-inset="true">
+                <li><h3>主選單</h3></li>
+                <li><a href="#home" >審計首頁</a></li>
+                <li><a href="#about" >關於審計</a></li>
+                <li><a href="#event" >近期活動</a></li>
+                <li><a href="#shop01" >店家介紹</a></li>
+                <li><a href="#" style="background-color: #00FFFF">我的最愛</a></li>
+                <li><a href="#more" >探索更多</a></li>
+                <li><a href="#bus" >公車資訊</a></li>
+                <li><a href="#ubike" >附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#about_us" >關於我們</a></li>
+              </ul> 
+		</div>
+        
+         <div data-role="panel" class="panel_right" id="favorite-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+	          <div >
+	          	 <h3>登入</h3>
+	            
+	           		<div data-role="fieldcontain">
+                <label for="account">帳號:</label>
+                <input type="text" name="account" id="account">
+              </div>
+
+	   				<div data-role="fieldcontain">
+	   		 			<label for="password">密碼:</label>
+	   		 			<input type="password" name="password" id="password">
+	   		 		</div> 
+
+	   		 	   <div class="ui-grid-a">
+	       	    	<div class="ui-block-a">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+	       	    	</div>
+	       	    	<div class="ui-block-b">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+	       	    	</div>
+	       	    	
+	       	     </div>
+	           </div>
+	         </div>
+
+		<div data-role="header" data-theme="b" data-position="fixed">
+			<a href="#favorite-panell" data-role="button" data-theme="b" data-icon="bars" data-iconpos="notext" >LeftPanel</a>
+			<a href="#favorite-panelr" data-role="button" data-theme="b" data-icon="arrow-l" data-iconpos="notext" >Panel</a>	
+			<h1>我的最愛</h1>
+		</div>
+
+	<div data-role="main" class="ui-content" data-theme="a">
+			
+			<!-- ListView;inset(縮排);filter(搜尋);list-divider(分類) -->
+			<div data-role="content" >
+				<ul data-role="listview" data-inset="true"data-theme="a">
+					<li>						
+						<a href="javascript:alert('不要按')"><img src="images/food003.jpg" width="100%" class="ui-li-thumb">
+							<h2>草莓蛋糕</h2>
+                			<p>正常看著廣大造成做什點點共有生成航空作者</p>	
+							<p class="ui-li-aside">缺貨中</p>
+						</a>					
+					</li>
+					<li>						
+						<a href="javascript:alert('不要按')"><img src="images/fruit006.jpg" width="100%" class="ui-li-thumb">
+							<h2>西瓜</h2>
+							<p>夏天吃</p>
+						</a>					
+					</li>
+					<li>						
+						<a href="javascript:alert('不要按')"><img src="images/fruit002.jpg" width="100%" class="ui-li-thumb">
+							<h2>鳳梨</h2>
+							<p>好吃</p>
+						</a>					
+					</li>
+					<li>						
+						<a href="javascript:alert('不要按')"><img src="images/food001.jpg" width="100%" class="ui-li-thumb">
+							<h2>鳳梨酥</h2>
+							<p>難得吃</p>
+						</a>					
+					</li>
+				</ul>
+							
+			</div>
+		</div>
+		<div data-role="footer" data-theme="b" data-position="fixed">
+			
+		</div>
+	</div>
+
+<!-- 探索更多設定頁面 圖片版面怪異需調整 -->	
+	<div data-role="page" id="more">
+		<div data-role="panel" id="more-panell" data-position="left" data-theme="b" data-dispaly="overlay" ><!-- 這是 Panel鈕 -->
+			<ul data-role="listview" data-inset="true">
+                <li><h3>主選單</h3></li>
+                <li><a href="#home" >審計首頁</a></li>
+                <li><a href="#about" >關於審計</a></li>
+                <li><a href="#event" >近期活動</a></li>
+                <li><a href="#shop01" >店家介紹</a></li>
+                <li><a href="#favorite" >我的最愛</a></li>
+                <li><a href="#" style="background-color: #00FFFF">探索更多</a></li>
+                <li><a href="#bus" >公車資訊</a></li>
+                <li><a href="#ubike" >附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#about_us" >關於我們</a></li>
+              </ul> 
+		</div>
+        
+         <div data-role="panel" class="panel_right" id="more-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+	          <div >
+	          	 <h3>登入</h3>
+	            
+	           		<div data-role="fieldcontain">
+                <label for="account">帳號:</label>
+                <input type="text" name="account" id="account">
+              </div>
+
+	   				<div data-role="fieldcontain">
+	   		 			<label for="password">密碼:</label>
+	   		 			<input type="password" name="password" id="password">
+	   		 		</div> 
+
+	   		 	   <div class="ui-grid-a">
+	       	    	<div class="ui-block-a">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+	       	    	</div>
+	       	    	<div class="ui-block-b">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+	       	    	</div>
+	       	    	
+	       	     </div>
+	           </div>
+	       </div>
+         
+			
+		<div data-role="header" data-position="fixed" data-theme="b">
+			<a href="#more-panell" data-role="button" data-theme="a"  data-icon="bars" data-iconpos="notext" id="homeprev" >Back</a>
+			<a href="#more-panelr" data-role="button" data-theme="a" data-icon="arrow-l" class="ui-btn-right" data-iconpos="notext" id="homenext">Next</a>	
+		<h1>探索更多</h1>
+		
+		</div>
+		<!-- leftpanel -->
+		
+		<div role="main" class="ui-content">
+			
+             <table width="3500" height="900">
+　			<tr><td align="center" valign="center"><div class="ui-grid-c">
+				<div class="ui-block-a"><a href="https://goo.gl/maps/2RHEGt71hmB2" data-role="button"><img src="images/未命名.png" alt="" width="50%"></a></div>
+				<div class="ui-block-a"><a href="https://goo.gl/maps/qxcEsBDtWUK2" data-role="button"><img src="images/未命名1.png" alt="" width="50%"></a></div>
+				<div class="ui-block-a"><a href="https://goo.gl/maps/S9ZHauG7kTQ2" data-role="button"><img src="images/未命名2.png" alt=""width="50%"></a></div>
+				<div class="ui-block-a"><a href="https://goo.gl/maps/SNiQ2LrXUf32" data-role="button"><img src="images/未命名3.png" alt=""width="50%"></a></div>
+			</div></td></tr>
+		</table>
+   	</div>	
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		
+	</div>
+</div>
+
+<!-- 公車資訊設定頁面 -->
+<div data-role="page" id="bus">
+	    <div data-role="panel" id="bus-panell" data-position="left" data-theme="b" data-dispaly="overlay" ><!-- 這是 Panel鈕 -->
+			<ul data-role="listview" data-inset="true">
+                <li><h3>主選單</h3></li>
+                <li><a href="#home" >審計首頁</a></li>
+                <li><a href="#about" >關於審計</a></li>
+                <li><a href="#event" >近期活動</a></li>
+                <li><a href="#shop01" >店家介紹</a></li>
+                <li><a href="#favorite" >我的最愛</a></li>
+                <li><a href="#more" >探索更多</a></li>
+                <li><a href="#" style="background-color: #00FFFF">公車資訊</a></li>
+                <li><a href="#ubike" >附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#about_us" >關於我們</a></li>
+              </ul> 
+		</div>
+        
+         <div data-role="panel" class="panel_right" id="bus-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+	          <div >
+	          	 <h3>登入</h3>
+	            
+	           		<div data-role="fieldcontain">
+                <label for="account">帳號:</label>
+                <input type="text" name="account" id="account">
+              </div>
+
+	   				<div data-role="fieldcontain">
+	   		 			<label for="password">密碼:</label>
+	   		 			<input type="password" name="password" id="password">
+	   		 		</div> 
+
+	   		 	   <div class="ui-grid-a">
+	       	    	<div class="ui-block-a">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+	       	    	</div>
+	       	    	<div class="ui-block-b">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+	       	    	</div>
+	       	    	
+	       	     </div>
+	           </div>
+	       </div>
+		<div data-role="header" data-position="fixed" data-theme="b">
+			<a href="#bus-panell" data-role="button" data-theme="a"  data-icon="bars" data-iconpos="notext" id="homeprev" >Back</a>
+			<a href="#bus-panelr" data-role="button" data-theme="a" data-icon="arrow-l" class="ui-btn-right" data-iconpos="notext" id="homenext">Next</a>	
+			<h1>公車資訊</h1>
+		</div>
+		<!-- leftpanel -->
+		
+		<div role="main" class="ui-content">
+			<img src="http://fakeimg.pl/350x200/00CED1/FFF/?text=img+placeholder">
+			<div class="ui-grid-b">
+				<div class="ui-block-a"><p>搭乘56 71 75路公車在美術館站下車,步行750公尺</p></div>
+				<div class="ui-block-b"><p>搭乘51路公車道英才郵局站下車,步行350公尺</p></div>
+				<div class="ui-block-c"><p>搭乘11路公車向上國中站下車,步行220公尺</p></div>
+				<div class="ui-block-b">
+					<a href="http://citybus.taichung.gov.tw/ibus/realroute.aspx"  dara-theme="b">公車動態查詢</a>
+				</div>
+    		</div>
+ 
+			
+			
+		</div>
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		
+	</div>
+</div>
+
+<!-- 附近ibike設定頁面 -->
+<div data-role="page" id="ubike">
+	    <div data-role="panel" id="ubike-panell" data-position="left" data-theme="b" data-dispaly="overlay" ><!-- 這是 Panel鈕 -->
+			<ul data-role="listview" data-inset="true">
+                <li><h3>主選單</h3></li>
+                <li><a href="#home" >審計首頁</a></li>
+                <li><a href="#about" >關於審計</a></li>
+                <li><a href="#event" >近期活動</a></li>
+                <li><a href="#shop01" >店家介紹</a></li>
+                <li><a href="#favorite" >我的最愛</a></li>
+                <li><a href="#more" >探索更多</a></li>
+                <li><a href="#bus" >公車資訊</a></li>
+                <li><a href="#" style="background-color: #00FFFF">附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#about_us" >關於我們</a></li>
+              </ul> 
+		</div>
+        
+         <div data-role="panel" class="panel_right" id="ubike-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+	          <div >
+	          	 <h3>登入</h3>
+	            
+	           		<div data-role="fieldcontain">
+                <label for="account">帳號:</label>
+                <input type="text" name="account" id="account">
+              </div>
+
+	   				<div data-role="fieldcontain">
+	   		 			<label for="password">密碼:</label>
+	   		 			<input type="password" name="password" id="password">
+	   		 		</div> 
+
+	   		 	   <div class="ui-grid-a">
+	       	    	<div class="ui-block-a">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+	       	    	</div>
+	       	    	<div class="ui-block-b">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+	       	    	</div>
+	       	    	
+	       	     </div>
+	           </div>
+	       </div>
+		<div data-role="header" data-position="fixed" data-theme="b">
+			<a href="#ubike-panell" data-role="button" data-theme="a"  data-icon="bars" data-iconpos="notext" id="homeprev" >Back</a>
+			<a href="#ubike-panelr" data-role="button" data-theme="a" data-icon="arrow-l" class="ui-btn-right" data-iconpos="notext" id="homenext">Next</a>		
+			<h1>附近ubike</h1>
+		
+		</div>
+	
+		<div role="main" class="ui-content">
+			<table width="3500" height="900">
+　				<tr>
+					<td align="center" valign="center">
+						<div class="ui-grid-c">
+							<!-- <div class="ui-block-a"><img src="img/fbais.PNG" alt="" width="100%"></div> -->
+							<div class="ui-block-a"><a href="https://goo.gl/maps/5rQqKFvrhcL2" data-role="button"><img src="images/a4646.png" alt="" width="100%"></a></div>
+							<div class="ui-block-a"><a href="https://goo.gl/maps/5rQqKFvrhcL2" data-role="button"><img src="images/d4949.png" alt="" width="100%"></a></div>
+							<div class="ui-block-a"><a href="https://goo.gl/maps/5rQqKFvrhcL2" data-role="button"><img src="images/f44978.png" alt="" width="100%"></a></div>
+							<div class="ui-block-a"><a href="https://goo.gl/maps/5rQqKFvrhcL2" data-role="button"><img src="images/h4949498.png" alt="" width="100%"></a></div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+					
+				
+			 
+	<div data-role="footer" data-position="fixed" data-theme="b">
+		
+	</div>
+</div>
+
+<!-- 關於我們設定頁面 -->
+	<div data-role="page" id="about_us" data-fullscreen="true">
+		<div data-role="panel" id="about_us-panell" data-position="left" data-theme="b" data-dispaly="overlay" ><!-- 這是 Panel鈕 -->
+			<ul data-role="listview" data-inset="true">
+                <li><h3>主選單</h3></li>
+                <li><a href="#home" >審計首頁</a></li>
+                <li><a href="#about" >關於審計</a></li>
+                <li><a href="#event" >近期活動</a></li>
+                <li><a href="#shop01" >店家介紹</a></li>
+                <li><a href="#favorite" >我的最愛</a></li>
+                <li><a href="#more" >探索更多</a></li>
+                <li><a href="#bus" >公車資訊</a></li>
+                <li><a href="#ubike" >附近ubike</a></li>
+                <li><a href="#" >導航到審計</a></li>
+                <li><a href="#" style="background-color: #00FFFF">關於我們</a></li>
+              </ul> 
+		</div>
+        
+         <div data-role="panel" class="panel_right" id="about_us-panelr" data-position="right" data-theme="b" data-dispaly="overlay">
+	          <div >
+	          	 <h3>登入</h3>
+	            
+	           		<div data-role="fieldcontain">
+                <label for="account">帳號:</label>
+                <input type="text" name="account" id="account">
+              </div>
+
+	   				<div data-role="fieldcontain">
+	   		 			<label for="password">密碼:</label>
+	   		 			<input type="password" name="password" id="password">
+	   		 		</div> 
+
+	   		 	   <div class="ui-grid-a">
+	       	    	<div class="ui-block-a">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="login">登入</a>
+	       	    	</div>
+	       	    	<div class="ui-block-b">
+	       	    	     <a href="#" data-role="button" data-theme="b" id="reg">註冊</a>
+	       	    	</div>
+	       	    	
+	       	     </div>
+	           </div>
+	       </div>
+		<div data-role="header"  data-position="fixed">
+			<a href="#about_us-panell" data-role="button" data-theme="a"  data-icon="bars" data-iconpos="notext" id="homeprev" >Back</a>
+			<a href="#about_us-panelr" data-role="button" data-theme="a" data-icon="arrow-l" class="ui-btn-right" data-iconpos="notext" id="homenext">Next</a>		
+			<h1>關於我們</h1>
+			
+		</div>
+		
+		<div data-role="main" class="ui-content">
+				<div class="pimg">	
+			<a href="#" id="homelink">
+				<img src="images/slider1.jpg" alt="" >
+			</a>
+			</div>
+           
+				<div  style="text-align: center;" >
+					<p>組長:林繨菖</p>
+					<p>組員:林文政</p>
+					<p>組員:張峻硯</p>
+					<p>組員:王朝立</p>
+					<p>組員:傅森</p>
+					<p>組員:邱柏瑞</p>	
+				</div>
+				
+			
+			</div>
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+	
+		</div>
+	</div>
+
+</body>
+</html>
