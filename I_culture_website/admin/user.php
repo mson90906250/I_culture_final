@@ -69,7 +69,7 @@
 
 			//check errors
 			if(!empty($errors)){
-				echo display_errors($errors);
+				echo showErrors($errors);
 			}else{
 				//add a user
 				$hashed_password = password_hash($password,PASSWORD_DEFAULT);
