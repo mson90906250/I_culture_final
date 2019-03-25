@@ -130,7 +130,7 @@
 						<option value="c" <?php echo (isset($_GET['shop_type'])&&$preshop_info['Kind']=='c')?' selected':''; ?>>文創類</option>
 					</select>					
 				</div>
-				<?php if(!isset($preshop_info)): ?>
+				<?php if(!isset($preshop_info['URL'])): ?>
 					<div class="col-md-4">
 						<label for="photo">店家圖片 (僅接受png,jpg,jpeg,gif 8MB以下的圖片)</label>
 						<input type="file" name="photo" id="photo" class="form-control" accept=".png,.jpg,.jpeg,.gif" >
